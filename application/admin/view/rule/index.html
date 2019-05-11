@@ -1,0 +1,135 @@
+{include file="public/_header" /}
+<div class="pageheader">
+    <h3><i class="fa fa-edit"></i> 权限管理 </h3>
+    <div class="breadcrumb-wrapper hidden-xs"> <span class="label">当前位置:</span>
+        <ol class="breadcrumb">
+            <li> <a href="index.html"> 主页 </a> </li>
+            <li class="active"> 权限管理 </li>
+        </ol>
+    </div>
+</div>
+<div class="page">
+    <div class="panel panel-default">
+        <h4 class="nm pad-15"> <button type="button" data-toggle="modal" data-target="#addrule" class="btn btn-success  add"><i class="fa fa-plus"></i>&nbsp;
+            添加权限 </button></h4>
+        <div class="panel-body">
+            <div class="modal fade" id="addrule" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form method="post" action="{:url('rule/add')}" name="form" class="form-validate">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title" id="myModalLabel">添加权限</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label>名称</label>
+                                    <input class="form-control" type="text" name="title" required data-msg="此为必填项">
+                                </div>
+                                <div class="form-group">
+                                    <label>权限</label>
+                                    <input class="form-control" type="text" name="name" required data-msg="此为必填项">
+                                    <input type="hidden" name="ruleid" value="">
+                                    <input type="hidden" name="pid" value="" id="pid">
+                                    <p class="help-block">输入模块/控制器/方法即可 例如 Rule/index</p>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <span type="button" class="btn btn-default" data-dismiss="modal">关闭</span>
+                                <button type="submit" class="btn btn-primary btn-submit">提交</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <div class="modal fade" id="editrule" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form method="post" action="{:url('rule/edit')}" name="form" class="form-validate">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title" id="">修改权限</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label>名称</label>
+                                    <input class="form-control" type="text" name="title"  required data-msg="此为必填项">
+                                </div>
+                                <div class="form-group">
+                                    <label>权限</label>
+                                    <input class="form-control" type="text" name="name" required data-msg="此为必填项">
+                                    <input type="hidden" name="ruleid" value="">
+                                    <input type="hidden" name="pid" value="">
+                                    <p class="help-block">输入模块/控制器/方法即可 例如 Rule/index</p>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <span type="button" class="btn btn-default" data-dismiss="modal">关闭</span>
+                                <button type="submit" class="btn btn-primary btn-submit">提交</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <div class="unseen">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>权限</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {foreach name="tree" id="v"}
+                    <tr>
+                        <td>{$v['_name']}</td>
+                        <td>{$v['name']}</td>
+                        <td>
+                            <button type="button" data-toggle="modal" data-target="#editrule" ruleId="{$v['id']}" pid="{$v['pid']}" ruleName="{$v['name']}" ruleTitle="{$v['title']}" class="btn btn-default btn-xs edit"><i class="fa fa-edit"></i>&nbsp;
+                            编辑 </button>
+                            <button type="button" data-toggle="modal" data-target="#addrule" ruleId="{$v['id']}" pid="{$v['pid']}" class="btn btn-info btn-xs addchild"><i class="fa fa-plus"></i>&nbsp;
+                                添加子权限 </button>
+                            <a href="javascript:if(confirm('确定删除？'))location='{:url('rule/delete',array('id'=>$v['id']))}'" type="button" class="btn btn-danger btn-xs"><i class="fa fa-remove"></i>&nbsp;
+                                删除 </a>
+                        </td>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $(".add").on('click',function () {
+            $("input[name='name']").val('');
+            $("input[name='title']").val('');
+            $('input[name="ruleid"]').val('');
+            $('#pid').val(0);
+        });
+        $(".addchild").on('click',function () {
+            var pid = $(this).attr('ruleId');
+            $("input[name='name']").val('');
+            $("input[name='title']").val('');
+            $('input[name="ruleid"]').val('');
+            $('#pid').val(pid);
+        });
+        $(".edit").on('click',function () {
+            var ruleid = $(this).attr('ruleId');
+            var name = $(this).attr('ruleName');
+            var title = $(this).attr('ruletitle');
+            var pid = $(this).attr('pid');
+            $('input[name="name"]').val(name);
+            $('input[name="title"]').val(title);
+            $('input[name="ruleid"]').val(ruleid);
+            $('input[name="pid"]').val(pid);
+        });
+    })
+</script>
+{include file="public/_footer" /}

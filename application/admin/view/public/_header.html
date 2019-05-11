@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en" data-ng-app="SensationApp">
+<head>
+    <meta charset="utf-8">
+    <meta name="fragment" content="!">
+    <title>AdminPro Web Application</title>
+    <meta name="description" content="Responsive Admin Web App">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:700,600,400" rel="stylesheet" type="text/css">
+
+    <!-- Needs images, font... therefore can not be part of main.css -->
+    <link rel="stylesheet" href="{$Think.config.web_root}/styles/font-awesome.css">
+    <link rel="stylesheet" href="{$Think.config.web_root}/styles/weather-icons.css">
+
+    <link rel="stylesheet" href="{$Think.config.web_root}/styles/main.css"/>
+
+    <link rel="stylesheet" href="{$Think.config.web_root}/styles/waves.css">
+    <script src="{$Think.config.web_root}/scripts/ui.js"></script>
+
+    <script src="{$Think.config.web_root}/scripts/app.js"></script>
+    <script src="{$Think.config.web_root}/scripts/jquery.cookie.js"></script>
+    <script src="{$Think.config.web_root}/vendor/jquery-validation/jquery.validate.min.js"></script>
+    <script src="{$Think.config.web_root}/scripts/front.js"></script>
+    <script src="{$Think.config.web_root}/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <style>
+        .invalid-feedback {
+            display: none;
+            width: 100%;
+            margin-top: .25rem;
+            font-size: 80%;
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body data-ng-controller="AppCtrl">
+<div id="app" class="app" data-custom-page="" data-off-canvas-nav="" data-ng-class=" {'layout-boxed': admin.layout} ">
+    <header data-ng-controller="HeaderCtrl" id="header" class="header-container {{admin.navbarHeaderColor}}" data-ng-class="{'header-fixed': admin.fixedHeader}">
+        {include file="public/header" /}
+    </header>
+    <div class="main-container">
+        <aside id="nav-container" class="nav-container {{admin.asideColor}}" data-ng-class=" {'nav-fixed': admin.fixedSidebar, 'nav-horizontal': admin.menu}">
+            {include file="public/nav" /}
+        </aside>
+        <div id="content" class="content-container animate-fade-up">
+            <!-- Site Setting Panel -->
+            <div id="settings" style="display:none">
+                {include file="public/settings" /}
+            </div>
+            <!-- Site Setting Panel End -->

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en" data-ng-app="SensationApp">
+<head>
+    <meta charset="utf-8">
+    <meta name="fragment" content="!">
+    <title>AdminPro Web Application</title>
+    <meta name="description" content="Responsive Admin Web App">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:700,600,400" rel="stylesheet" type="text/css">
+
+    <!-- Needs images, font... therefore can not be part of main.css -->
+    <link rel="stylesheet" href="{$Think.config.web_root}/styles/font-awesome.css">
+    <link rel="stylesheet" href="{$Think.config.web_root}/styles/weather-icons.css">
+
+    <link rel="stylesheet" href="{$Think.config.web_root}/styles/main.css"/>
+
+    <link rel="stylesheet" href="{$Think.config.web_root}/styles/waves.css">
+    <script src="{$Think.config.web_root}/scripts/ui.js"></script>
+
+    <script src="{$Think.config.web_root}/scripts/app.js"></script>
+    <script src="{$Think.config.web_root}/scripts/jquery.cookie.js"></script>
+
+    <script src="{$Think.config.web_root}/vendor/jquery-validation/jquery.validate.min.js"></script>
+    <script src="{$Think.config.web_root}/scripts/front.js"></script>
+    <style>
+        .invalid-feedback {
+            display: none;
+            width: 100%;
+            margin-top: .25rem;
+            font-size: 80%;
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body data-ng-controller="AppCtrl">
+<div id="app" class="app" data-custom-page="" data-off-canvas-nav="" data-ng-class=" {'layout-boxed': admin.layout} ">
+    <div class="lock-wrapper">
+        <div class="panel lock-box">
+            <div class="center"> <img alt="" src="{$Think.config.web_root}/images/photos/user.png" class="img-circle"/> </div>
+            <h4> DP PROJECT </h4>
+            <p class="text-center">请登录</p>
+            <div class="row">
+                <form action="" method="post" class="form-inline form-validate" role="form">
+                    <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                        <div class="iconic-input right">
+                            <label class="text-muted">用户名</label>
+                            <input name="username" type="text" placeholder="请输入用户名" class="form-control padding-horizontal-15" required="required" data-msg="请输入用户名"/>
+                            <i class="fa fa-envelope"></i> </div>
+                        <div class="iconic-input right">
+                            <label class="text-muted">密码</label>
+                            <input type="password" name="password" placeholder="请输入密码" class="form-control lock-input" required="required" data-msg="请输入密码"/>
+                            <i class="fa fa-lock"></i> </div>
+                        <div class="square-blue pull-left pv-15">
+                            <label class="ui-checkbox">
+                                <input name="checkbox1" type="checkbox" value="option1">
+                                <span> <strong> 记住用户名 </strong> </span> </label>
+                        </div>
+                        <button type="submit" class="btn btn-block btn-primary">登录</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Google Map -->
+<!--<script src="http://maps.google.com/maps/api/js?sensor=false"></script>-->
+
+
+</body>
+</html>

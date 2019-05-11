@@ -1,0 +1,37 @@
+{include file="public/_header" /}
+<div class="pageheader">
+    <h3><i class="fa fa-user"></i> 用户列表 </h3>
+    <div class="breadcrumb-wrapper hidden-xs"> <span class="label">当前位置:</span>
+        <ol class="breadcrumb">
+            <li> <a href="index.html"> 主页 </a> </li>
+            <li class="active"> 用户列表 </li>
+        </ol>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="table-flip-scroll">
+            <table class="table table-bordered table-striped cf">
+                <thead class="cf">
+                <tr>
+                    <th>用户名</th>
+                    <th>角色</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {foreach $users as $user}
+                <tr>
+                    <td>{$user['username']}</td>
+                    <td>{$user['groups']}</td>
+                    <td><span class="label label-sm {$user['status_css']}">{$user['status_str']}</span></td>
+                    <td><a class="ng-scope ng-binding editable editable-click">修改权限或密码</a></td>
+                </tr>
+                {/foreach}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{include file="public/_footer" /}

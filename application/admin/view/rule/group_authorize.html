@@ -1,0 +1,75 @@
+{include file="public/_header" /}
+<div class="pageheader">
+    <h3><i class="fa fa-edit"></i> 权限分配 </h3>
+    <div class="breadcrumb-wrapper hidden-xs"> <span class="label">当前位置:</span>
+        <ol class="breadcrumb">
+            <li> <a href="index.html"> 主页 </a> </li>
+            <li class="active"> 权限分配 </li>
+        </ol>
+    </div>
+</div>
+<div class="page">
+    <form method="post" action="">
+    {foreach $rules as $rule}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <header class="panel-heading">
+                        <label class="ui-checkbox">
+                            <input name="rules[]" {if in_array($rule['id'],$group['rules'])}checked{/if} class="havechild" type="checkbox" value="{$rule['id']}">
+                            <span><strong> {$rule['title']} </strong></span>
+                        </label>
+                        {if !empty($rule['_data'])}
+                        <span class="pull-right"> <i class="fa fa-chevron-down mr-10" panel-Toggle=""></i>
+                        </span>
+                        {/if}
+                    </header>
+                    {if !empty($rule['_data'])}
+                    <div class="panel-body" collapse="isCollapsed">
+                        {foreach $rule['_data'] as $val}
+                        <div class="form-group col-sm-12">
+                            <label class="col-sm-2"><input name="rules[]" {if in_array($val['id'],$group['rules'])}checked{/if} class="havechild" type="checkbox" value="{$val['id']}" data-parent="{$rule['id']}">
+                                <span><strong> {$val['title']} </strong></span></label>
+                            {if !empty($rule['_data'])}
+                            <div class="col-sm-10">
+                                {foreach $val['_data'] as $v}
+                                <label class="ui-checkbox">
+                                    <input name="rules[]" {if in_array($v['id'],$group['rules'])}checked{/if} type="checkbox" value="{$v['id']}" data-parent="{$val['id']}" data-grandpa="{$rule['id']}">
+                                    <span>{$v['title']}</span></label>
+                                {/foreach}
+                            </div>
+                            {/if}
+                        </div>
+                        {/foreach}
+                    </div>
+                    {/if}
+                </div>
+            </div>
+        </div>
+    {/foreach}
+        <div class="pull-right navbar-static-bottom">
+            <button class="waves-effect waves-button waves-float waves-success">提交</button>
+        </div>
+    </form>
+</div>
+<script>
+    $(function () {
+        $(".havechild").click(function () {
+            var id = $(this).val();
+            if($(this).is(':checked')){
+                $('input[name="rules[]"]').each(function () {
+                    if($(this).data('parent') == id || $(this).data('grandpa') == id) {
+                        $(this).prop("checked",true);
+                    }
+                })
+            }else{
+                $('input[name="rules[]"]').each(function () {
+                    if($(this).data('parent') == id || $(this).data('grandpa') == id){
+                        $(this).removeAttr("checked",false);
+                    }
+                })
+            }
+        });
+    })
+</script>
+{include file="public/_footer" /}
