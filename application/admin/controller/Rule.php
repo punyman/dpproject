@@ -34,7 +34,7 @@ class Rule extends Admin
         ];
         AuthRule::update($data, ['id' => $ruleid]);
         plog('rule/edit', '编辑权限 : ' . $ruleid);
-        $this->success('操作成功');
+        $this->success('操作成功', url('rule/index'));
     }
     public function add()
     {
@@ -45,14 +45,14 @@ class Rule extends Admin
         ];
         AuthRule::create($data);
         plog('rule/add', '添加权限 : ' . $data['title'] . ' 路由 : ' . $data['name']);
-        $this->success('操作成功');
+        $this->success('操作成功', url('rule/index'));
     }
     public function delete($id)
     {
         if ($id) {
             AuthRule::destroy(['id' => $id]);
             plog('rule/delete', '删除权限 : ' . $id);
-            $this->success('操作成功');
+            $this->success('操作成功', url('rule/index'));
         } else {
             $this->error('参数错误');
         }
@@ -66,7 +66,7 @@ class Rule extends Admin
     {
         Db::name('auth_group')->insert(['title' => input('post.title')]);
         plog('rule/group_add','添加角色 : ' . input('post.title'));
-        $this->success('操作成功');
+        $this->success('操作成功', url('rule/group_add'));
     }
     public function group_edit()
     {
@@ -76,14 +76,14 @@ class Rule extends Admin
         }
         Db::name('auth_group')->where(['id' => $id])->update(['title' => input('post.title')]);
         plog('rule/group_edit', '修改角色 : ' . $id);
-        $this->success('操作成功');
+        $this->success('操作成功', url('rule/group'));
     }
     public function group_delete($id)
     {
         if ($id) {
             Db::name('auth_group')->delete(['id' => $id]);
             plog('rule/group_delete', '删除角色 : ' . $id);
-            $this->success('操作成功');
+            $this->success('操作成功', url('rule/group'));
         } else {
             $this->error('参数错误');
         }
@@ -94,7 +94,7 @@ class Rule extends Admin
             $rules = input('post.rules/a');
             Db::name('auth_group')->where(['id' => $id])->update(['rules' => implode(',', $rules)]);
             plog('rule/group_authorize', '编辑角色权限 : ' . $id);
-            $this->success('权限编辑成功');
+            $this->success('权限编辑成功', url('rule/group'));
         } else {
             $group = Db::name('auth_group')->where(['id' => $id])->find();
             $group['rules'] = explode(',',$group['rules']);
@@ -111,19 +111,48 @@ class Rule extends Admin
         foreach ($users as &$val) {
             if ($val['status'] == 0) {
                 $val['status_str'] = '禁用';
-                $val['status_css'] = 'btn-danger';
+                $val['status_css'] = 'waves-danger';
             } else {
                 $val['status_str'] = '正常';
-                $val['status_css'] = 'btn-success';
+                $val['status_css'] = 'waves-success';
             }
-            $groups = Db::name('auth_group')->alias('g')->field('g.title')->join('__AUTH_GROUP_ACCESS__ a', 'g.id=a.group_id')->select();
+            $groups = Db::name('auth_group')->alias('g')->field('g.title')->join('__AUTH_GROUP_ACCESS__ a', 'g.id=a.group_id')->where('a.uid='.$val['id'])->select();
+            $g = array();
             foreach ($groups as $v) {
                 $g[] = $v['title'];
             }
             $val['groups'] = implode('、', $g);
         }
         unset($val);
-        return view('', ['users' => $users]);
+        return view('', ['users' => $users, 'page' => $page]);
+    }
+    public function user_add()
+    {
+        if (Request::instance()->isPost()) {
+            $data = input('post.');
+            $password = trim($data['password']);
+            $insertdate = array('username' => $data['username'], 'status' => $data['status'], 'mobile' => $data['mobile'], 'email' => $data['email'], 'nickname' => $data['nickname']);
+            if ($password) {
+                $salt = random(8);
+                $newpassword = userpassword($password, $salt);
+                $insertdate['password'] = $newpassword;
+                $insertdate['salt'] = $salt;
+            }
+            $id = Db::name('users')->insertGetId($insertdate);
+            if (!empty($data['groups'])) {
+                foreach ($data['groups'] as $k => $v) {
+                    $group = [
+                        'uid' => $id,
+                        'group_id' => $v
+                    ];
+                    Db::name('auth_group_access')->insert($group);
+                }
+            }
+            $this->success('添加成功', url('rule/users'));
+        } else {
+            $groups = Db::name('auth_group')->where(['status' => 1])->select();
+            return view('', ['groups' => $groups]);
+        }
     }
     public function user_edit($id){
         $user = Db::name('users')->where(['id' => $id])->find();
@@ -139,10 +168,10 @@ class Rule extends Admin
                     Db::name('auth_group_access')->insert($group);
                 }
             }
-            $passwod = trim(input('post.password'));
-            $update = array('username' => input('post.username'), 'status' => input('post.status'), 'mobile' => input('post.mobile'), 'email' => input('post.email'), 'nickname' => input('post.email'));
-            if ($passwod) {
-                $newpassword = userpassword($passwod, $user['salt']);
+            $password = trim(input('post.password'));
+            $update = array('username' => $data['username'], 'status' => $data['status'], 'mobile' => $data['mobile'], 'email' => $data['email'], 'nickname' => $data['nickname']);
+            if ($password) {
+                $newpassword = userpassword($password, $user['salt']);
                 $update['password'] = $newpassword;
             }
             Db::name('users')->where(['id' => $id])->update($update);

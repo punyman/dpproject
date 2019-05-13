@@ -1,30 +1,27 @@
 {include file="public/_header" /}
 <div class="pageheader">
-  <h3><i class="fa fa-check-square"></i> 维护用户信息 </h3>
+  <h3><i class="fa fa-check-square"></i> 添加用户 </h3>
   <div class="breadcrumb-wrapper hidden-xs"> <span class="label">当前位置:</span>
     <ol class="breadcrumb">
       <li> <a href="index.html"> 首页 </a> </li>
-      <li class="active"> 维护用户信息 </li>
+      <li class="active"> 添加用户 </li>
     </ol>
   </div>
 </div>
 <div class="page">
-  <div class="row">
-    <div class="col-lg-12">
       <div class="panel panel-default">
           <div class="panel-body">
             <form class="form-horizontal" method="post" action="">
               <div class="form-group">
                 <label class="col-sm-2">用户名</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control" name="username" value="{$user['username']}">
+                  <input type="text" class="form-control" name="username" value="">
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2">密码</label>
                 <div class="col-sm-10">
                   <input type="password" value="" name="password" class="form-control">
-                  <span class="help-block">留空则不修改密码</span>
                 </div>
               </div>
               <div class="form-group">
@@ -32,7 +29,7 @@
                 <div class="col-sm-10">
                   {foreach $groups as $g}
                   <label class="ui-checkbox">
-                    <input name="groups[]" type="checkbox" {in name="g['id']" value="$user['groups']"}checked{/in} value="{$g['id']}" >
+                    <input name="groups[]" type="checkbox" value="{$g['id']}" >
                     <span>{$g['title']}</span></label>
                   {/foreach}
                 </div>
@@ -41,29 +38,29 @@
                 <label class="col-sm-2">状态</label>
                 <div class="col-sm-10">
                   <label class="ui-radio">
-                    <input name="status" {if $user['status'] == 1} checked{/if} type="radio" value="1" >
+                    <input name="status" type="radio" value="1" >
                     <span>正常</span></label>
                   <label class="ui-radio">
-                    <input name="status" {if $user['status'] == 0} checked{/if} type="radio" value="0">
+                    <input name="radio1" type="radio" value="0">
                     <span>禁用</span></label>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2">联系方式</label>
                 <div class="col-sm-10">
-                  <input type="text" name="mobile" value="{$user['mobile']}" class="form-control">
+                  <input type="text" name="mobile" value="" class="form-control">
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2">邮箱</label>
                 <div class="col-sm-10">
-                  <input type="text" name="email" value="{$user['email']}" class="form-control">
+                  <input type="text" name="email" value="" class="form-control">
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2">操作员姓名</label>
                 <div class="col-sm-10">
-                  <input type="text" name="nickname" value="{$user['nickname']}" class="form-control">
+                  <input type="text" name="nickname" value="" class="form-control">
                 </div>
               </div>
               <div class="form-group  pull-right">
@@ -75,7 +72,5 @@
             </form>
           </div>
       </div>
-    </div>
-  </div>
  </div>
 {include file="public/_footer" /}

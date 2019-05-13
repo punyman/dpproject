@@ -24,7 +24,7 @@ class Admin extends Controller
         $controller = request()->controller();
         $action = request()->action();
         if (!$auth->check($controller . '/' . $action, $uid)) {
-            //$this->error('您没有权限访问');
+            $this->error('您没有权限访问');
         }
         $this->assign('current_controller', strtolower($controller));
     }
