@@ -20,14 +20,16 @@ class Users extends Model
     public function check($username, $password)
     {
         $user = Db::name('users')->where(['username' => $username])->find();
-        if (empty($user) || $user['status'] == 0) {
-            return false;
+        if (empty($user)) {
+            return error(-1, '用户名密码错误');
         } else {
+            if (!$user['status']) {
+                return error(-1 ,'此账户暂时无法登陆');
+            }
             if (userpassword($password, $user['salt']) == $user['password']) {
                 return $user;
             }
         }
-        return false;
     }
     public function setLogin($user = array())
     {

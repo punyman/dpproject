@@ -25,8 +25,8 @@
                 <tr>
                     <td>{$user['username']}</td>
                     <td>{$user['groups']}</td>
-                    <td><span class="label label-sm {$user['status_css']}">{$user['status_str']}</span></td>
-                    <td><a class="ng-scope ng-binding editable editable-click">修改权限或密码</a></td>
+                    <td><span class="btn {$user['status_css']} btn-xs">{$user['status_str']}</span></td>
+                    <td><a class="editable-click" href="{:url('rule/user_edit',array('id' => $user['id']))}">修改权限或密码</a></td>
                 </tr>
                 {/foreach}
                 </tbody>

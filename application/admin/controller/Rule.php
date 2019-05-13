@@ -111,10 +111,10 @@ class Rule extends Admin
         foreach ($users as &$val) {
             if ($val['status'] == 0) {
                 $val['status_str'] = '禁用';
-                $val['status_css'] = 'label-danger';
+                $val['status_css'] = 'btn-danger';
             } else {
                 $val['status_str'] = '正常';
-                $val['status_css'] = 'label-success';
+                $val['status_css'] = 'btn-success';
             }
             $groups = Db::name('auth_group')->alias('g')->field('g.title')->join('__AUTH_GROUP_ACCESS__ a', 'g.id=a.group_id')->select();
             foreach ($groups as $v) {
@@ -124,5 +124,37 @@ class Rule extends Admin
         }
         unset($val);
         return view('', ['users' => $users]);
+    }
+    public function user_edit($id){
+        $user = Db::name('users')->where(['id' => $id])->find();
+        if (Request::instance()->isPost()) {
+            $data = input('post.');
+            Db::name('auth_group_access')->where(array('uid' => $id))->delete();
+            if (!empty($data['groups'])) {
+                foreach ($data['groups'] as $k => $v) {
+                    $group = [
+                        'uid' => $id,
+                        'group_id' => $v
+                    ];
+                    Db::name('auth_group_access')->insert($group);
+                }
+            }
+            $passwod = trim(input('post.password'));
+            $update = array('username' => input('post.username'), 'status' => input('post.status'), 'mobile' => input('post.mobile'), 'email' => input('post.email'), 'nickname' => input('post.email'));
+            if ($passwod) {
+                $newpassword = userpassword($passwod, $user['salt']);
+                $update['password'] = $newpassword;
+            }
+            Db::name('users')->where(['id' => $id])->update($update);
+            $this->success('修改成功', url('rule/users'));
+        } else {
+            $groups = Db::name('auth_group')->alias('a')->field('a.id,a.title')->join('__AUTH_GROUP_ACCESS__ b', 'a.id=b.group_id')->where('b.uid=' . $user['id'])->select();
+            foreach ($groups as $v) {
+                $g[] = $v['id'];
+            }
+            $user['groups'] = $g;
+            $groups = Db::name('auth_group')->where(['status' => 1])->select();
+            return view('', ['user' => $user, 'groups' => $groups]);
+        }
     }
 }

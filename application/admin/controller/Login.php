@@ -22,8 +22,8 @@ class Login extends Controller
             $password = input('post.password');
             $model = new Users();
             $user = $model->check($username, $password);
-            if (!$user) {
-                $this->error('用户名密码错误!');
+            if (is_error($user)) {
+                $this->error($user['message']);
             } else {
                 $model->setLogin($user);
                 plog('login/index', '用户登录系统');

@@ -101,3 +101,18 @@ function decrypt($data, $key)
     }
     return $str;
 }
+function error($errno, $message = '') {
+    return array(
+        'errno' => $errno,
+        'message' => $message,
+    );
+}
+
+
+function is_error($data) {
+    if (empty($data) || !is_array($data) || !array_key_exists('errno', $data) || (array_key_exists('errno', $data) && $data['errno'] == 0)) {
+        return false;
+    } else {
+        return true;
+    }
+}
