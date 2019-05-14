@@ -27,5 +27,6 @@ class Admin extends Controller
             $this->error('您没有权限访问');
         }
         $this->assign('current_controller', strtolower($controller));
+        $this->assign('current_action', strtolower($action));
     }
 }

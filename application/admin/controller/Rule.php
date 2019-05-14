@@ -9,7 +9,6 @@ namespace app\admin\controller;
 
 use app\admin\model\AuthRule;
 use app\common\controller\Admin;
-use think\auth\Auth;
 use think\Db;
 use think\Request;
 

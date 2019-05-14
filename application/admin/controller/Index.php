@@ -7,9 +7,9 @@
  */
 namespace app\admin\controller;
 
-use app\common\controller\Admin;
+use app\common\controller\AdminBase;
 
-class Index extends Admin
+class Index extends AdminBase
 {
     public function index()
     {

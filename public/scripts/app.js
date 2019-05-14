@@ -3591,9 +3591,9 @@ app = angular.module("inlineedittable", ["ngTable"]).controller("inlineeditCtrl"
                     fixedHeader: !0,
                     fixedSidebar: !0,
                     themeID: "11",
-                    navbarHeaderColor: "bg-white",
+                    navbarHeaderColor: "bg-dark",
                     logo: "bg-dark",
-                    asideColor: "bg-dark"
+                    asideColor: "bg-white"
                 },
                 $scope.color = {
                     primary: "#248AAF",
