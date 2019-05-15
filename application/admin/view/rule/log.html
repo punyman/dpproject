@@ -1,0 +1,79 @@
+{include file="public/_header" /}
+<div class="pageheader">
+    <h3><i class="fa fa-file"></i> 操作日志 </h3>
+    <div class="breadcrumb-wrapper hidden-xs"> <span class="label">当前位置:</span>
+        <ol class="breadcrumb">
+            <li> <a href="index.html"> 主页 </a> </li>
+            <li class="active"> 操作日志 </li>
+        </ol>
+    </div>
+</div>
+<div class="page">
+    <div class="row">
+        <div class="col-md-12 center">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12 center">
+                            <form class="form-inline" method="post" action="">
+                                <div class="form-group">
+                                    <span class="ui-select">
+                                        <select name="action" style="width: 100%">
+                                          <option value="">操作类型</option>
+                                            {foreach $actions as $k => $a}
+                                          <option {if $action==$k}selected{/if} value="{$k}">{$a}</option>
+                                            {/foreach}
+                                        </select>
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    <span class="ui-select">
+                                        <select name="user" style="width: 100%">
+                                          <option value="">操作员</option>
+                                            {foreach $users as $u}
+                                          <option {if $uid==$u['id']}selected{/if} value="{$u['id']}">{$u['username']}</option>
+                                            {/foreach}
+                                        </select>
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-info btn-w-md">搜索</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="unseen">
+                <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th>用户</th>
+                        <th>类型</th>
+                        <th>操作内容</th>
+                        <th>操作IP</th>
+                        <th>操作时间</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {foreach $list as $log}
+                    <tr>
+                        <td>{$log['username']}</td>
+                        <td>{$actions[$log['action']]}</td>
+                        <td>{$log['remark']}</td>
+                        <td>{$log['ip']}</td>
+                        <td>{$log['create_time']}</td>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {$page}
+</div>
+{include file="public/_footer" /}

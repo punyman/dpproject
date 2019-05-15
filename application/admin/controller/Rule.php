@@ -8,6 +8,7 @@
 namespace app\admin\controller;
 
 use app\admin\model\AuthRule;
+use app\admin\model\Log;
 use app\common\controller\Admin;
 use think\Db;
 use think\Request;
@@ -147,6 +148,7 @@ class Rule extends Admin
                     Db::name('auth_group_access')->insert($group);
                 }
             }
+            plog('rule/user_add', '添加用户 : ' . $id . '【' . $data['username'] . '】');
             $this->success('添加成功', url('rule/users'));
         } else {
             $groups = Db::name('auth_group')->where(['status' => 1])->select();
@@ -174,6 +176,8 @@ class Rule extends Admin
                 $update['password'] = $newpassword;
             }
             Db::name('users')->where(['id' => $id])->update($update);
+            plog('rule/user_edit', '编辑用户 : ' . $id);
+
             $this->success('修改成功', url('rule/users'));
         } else {
             $groups = Db::name('auth_group')->alias('a')->field('a.id,a.title')->join('__AUTH_GROUP_ACCESS__ b', 'a.id=b.group_id')->where('b.uid=' . $user['id'])->select();
@@ -184,5 +188,34 @@ class Rule extends Admin
             $groups = Db::name('auth_group')->where(['status' => 1])->select();
             return view('', ['user' => $user, 'groups' => $groups]);
         }
+    }
+    public function log()
+    {
+        $data = array('action' => '', 'user' => 0);
+        $where = array();
+        $uid = 0;
+        $action = '';
+        if (Request::instance()->isPost()) {
+            $data = input('post.');
+            if ($data['action']) {
+                $action = trim($data['action']);
+                $where['action'] = $action;
+            }
+            if ($data['user']) {
+                $uid = intval($data['user']);
+                $where['uid'] = $uid;
+            }
+        }
+        $list = Db::name('log')->where($where)->order('create_time')->paginate(20);
+        $page = $list->render();
+        $list = $list->all();
+        foreach ($list as &$value) {
+            $value['create_time'] = date('Y-m-d H:i:s', $value['create_time']);
+            $value['username'] = Db::name('users')->where(['id' => $value['uid']])->value('username');
+        }
+        unset($value);
+        $actions = Log::$action;
+        $users = Db::name('users')->field('id,username')->select();
+        return view('', ['list' => $list, 'page' => $page, 'actions' => $actions, 'users' => $users, 'uid' => $uid, 'action' => $action]);
     }
 }
