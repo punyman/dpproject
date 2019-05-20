@@ -17,16 +17,30 @@
     <!--系统设置-->
     <li class="nav-title" data-i18n="system"> </li>
     <li>
-      <a href="">
+      <a href="" style="{if $current_controller == 'rule'}background:#ebebeb;{/if}">
         <i class="fa fa-cog"></i>
         <span data-i18n="authoritycontrol"> </span>
       </a>
-      <ul style="{if $current_controller == 'rule'}display:block{/if}">
-        <li><a href="{:url('rule/index')}"><span data-i18n="rule"></span></a> </li>
-        <li><a href="{:url('rule/group')}"><span data-i18n="rulegroup"></span></a> </li>
-        <li><a href="{:url('rule/users')}"><span data-i18n="users"></span></a> </li>
-        <li><a href="{:url('rule/log')}"><span data-i18n="log"></span></a> </li>
+      <ul style="{if $current_controller == 'rule'}display:block;{/if}">
+        <li {if $current_controller.'/'.$current_action == 'rule/index'}style="background: #ebebeb;"{/if}><a href="{:url('rule/index')}"><i class="fa fa-anchor mr-10"></i><span data-i18n="rule"></span></a> </li>
+        <li {if $current_controller.'/'.$current_action == 'rule/group'}style="background: #ebebeb;"{/if}><a href="{:url('rule/group')}"><i class="fa fa-anchor mr-10"></i><span data-i18n="rulegroup"></span></a> </li>
+        <li {if $current_controller.'/'.$current_action == 'rule/users'}style="background: #ebebeb;"{/if}><a href="{:url('rule/users')}"><i class="fa fa-anchor mr-10"></i><span data-i18n="users"></span></a> </li>
+        <li {if $current_controller.'/'.$current_action == 'rule/log'}style="background: #ebebeb;"{/if}><a href="{:url('rule/log')}"><i class="fa fa-anchor mr-10"></i><span data-i18n="log"></span></a> </li>
       </ul>
+    </li>
+    <!--内容管理-->
+    <li class="nav-title" data-i18n="article"> </li>
+    <li {if $current_controller.'/'.$current_action == 'article/category'}style="background: #ebebeb;"{/if}>
+      <a href="{:url('article/category')}">
+        <i class="fa fa-th-list mr-10"></i>
+        <span data-i18n="category"> </span>
+      </a>
+    </li>
+    <li {if $current_controller.'/'.$current_action == 'article/contents'}style="background: #ebebeb;"{/if}>
+    <a href="{:url('article/contents')}">
+      <i class="fa fa-file mr-10"></i>
+      <span data-i18n="list"> </span>
+    </a>
     </li>
     <!--Category name-->
     <li class="nav-title" data-i18n="Components"> </li>

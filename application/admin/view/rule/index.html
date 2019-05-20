@@ -3,7 +3,7 @@
     <h3><i class="fa fa-edit"></i> 权限管理 </h3>
     <div class="breadcrumb-wrapper hidden-xs"> <span class="label">当前位置:</span>
         <ol class="breadcrumb">
-            <li> <a href="index.html"> 主页 </a> </li>
+            <li> <a href="{:url('index/index')}"> 主页 </a> </li>
             <li class="active"> 权限管理 </li>
         </ol>
     </div>
@@ -24,11 +24,11 @@
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label>名称</label>
-                                    <input class="form-control" type="text" name="title" required data-msg="此为必填项">
+                                    <input class="form-control" type="text" name="title" required data-msg="请填写名称">
                                 </div>
                                 <div class="form-group">
                                     <label>权限</label>
-                                    <input class="form-control" type="text" name="name" required data-msg="此为必填项">
+                                    <input class="form-control" type="text" name="name" required data-msg="请填写权限">
                                     <input type="hidden" name="ruleid" value="">
                                     <input type="hidden" name="pid" value="" id="pid">
                                     <p class="help-block">输入模块/控制器/方法即可 例如 Rule/index</p>

@@ -89,5 +89,8 @@
     "rule":"权限管理",
     "rulegroup":"角色管理",
     "users":"用户管理",
-    "log":"操作日志"
+    "log":"操作日志",
+    "article":"内容",
+    "category":"文章分类",
+    "list":"文章列表"
 }
