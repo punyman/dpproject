@@ -1,0 +1,50 @@
+{include file="public/_header" /}
+<div class="pageheader">
+    <h3><i class="fa fa-file"></i> 添加文章分类 </h3>
+    <div class="breadcrumb-wrapper hidden-xs"> <span class="label">当前位置:</span>
+        <ol class="breadcrumb">
+            <li> <a href="{:url('index/index')}"> 主页 </a> </li>
+            <li class="active"> 添加文章分类 </li>
+        </ol>
+    </div>
+</div>
+<div class="page">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <form method="post" action="{:url('article/category_add')}" name="form" class="form-validate" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>名称</label>
+                        <input class="form-control" type="text" name="title" required data-msg="请填写名称">
+                    </div>
+                    <div class="form-group">
+                        <label>排序</label>
+                        <input class="form-control" type="text" value="0" name="displayorder">
+                    </div>
+                    <div class="form-group">
+                        <label>是否显示</label>
+                        <label></label>
+                        <label class="ui-radio">
+                            <input name="status" type="radio" value="1" checked>
+                            <span>是</span>
+                        </label>
+                        <label class="ui-radio">
+                            <input name="status" type="radio" value="0">
+                            <span>否</span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>分类图片</label>
+                        <input class="form-control" name="thumb" type="file" title="选择文件" data-ui-file-upload>
+                        <input type="hidden" name="pid" id="pid" value="{$parent_id}">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <span type="button" class="btn btn-default" data-dismiss="modal">关闭</span>
+                    <button type="submit" class="btn btn-primary btn-submit">提交</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{include file="public/_footer" /}
