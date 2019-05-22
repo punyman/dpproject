@@ -15,13 +15,13 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-12 center">
-                            <form class="form-inline" method="post" action="">
+                            <form class="form-inline" method="get" action="">
                                 <div class="form-group">
                                     <span class="ui-select">
                                         <select name="action" style="width: 100%">
                                           <option value="">操作类型</option>
                                             {foreach $actions as $k => $a}
-                                          <option {if $action==$k}selected{/if} value="{$k}">{$a}</option>
+                                          <option {if isset($where['action']) && $where['action']==$k}selected{/if} value="{$k}">{$a}</option>
                                             {/foreach}
                                         </select>
                                     </span>
@@ -31,13 +31,13 @@
                                         <select name="user" style="width: 100%">
                                           <option value="">操作员</option>
                                             {foreach $users as $u}
-                                          <option {if $uid==$u['id']}selected{/if} value="{$u['id']}">{$u['username']}</option>
+                                          <option {if isset($where['user']) && $where['user']==$u['id']}selected{/if} value="{$u['id']}">{$u['username']}</option>
                                             {/foreach}
                                         </select>
                                     </span>
                                 </div>
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-info btn-w-md">搜索</button>
+                                    <button type="submit" class="waves-effect waves-button waves-float waves-lightblue">搜索</button>
                                 </div>
                             </form>
                         </div>

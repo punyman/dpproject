@@ -111,10 +111,10 @@ class Rule extends Admin
         foreach ($users as &$val) {
             if ($val['status'] == 0) {
                 $val['status_str'] = '禁用';
-                $val['status_css'] = 'waves-danger';
+                $val['status_css'] = 'btn-danger';
             } else {
                 $val['status_str'] = '正常';
-                $val['status_css'] = 'waves-success';
+                $val['status_css'] = 'btn-success';
             }
             $groups = Db::name('auth_group')->alias('g')->field('g.title')->join('__AUTH_GROUP_ACCESS__ a', 'g.id=a.group_id')->where('a.uid='.$val['id'])->select();
             $g = array();
@@ -155,9 +155,18 @@ class Rule extends Admin
             return view('', ['groups' => $groups]);
         }
     }
-    public function user_edit($id){
+    public function user_edit(){
+        $id = Request::instance()->param('id');
         $user = Db::name('users')->where(['id' => $id])->find();
-        if (Request::instance()->isPost()) {
+        if (empty($user)) {
+            $this->error('未找到此用户', url('rule/users'));
+        }
+        if (Request::instance()->isAjax()) {
+            $value = Request::instance()->param('value');
+            Db::name('users')->where(['id' => $id])->update(['status' => $value]);
+            plog('rule/user_edit', '编辑用户状态为 : ' . ($value ? '正常' : '禁用'));
+            $this->success();
+        } elseif (Request::instance()->isPost()) {
             $data = input('post.');
             Db::name('auth_group_access')->where(array('uid' => $id))->delete();
             if (!empty($data['groups'])) {
@@ -191,22 +200,17 @@ class Rule extends Admin
     }
     public function log()
     {
-        $data = array('action' => '', 'user' => 0);
         $where = array();
-        $uid = 0;
-        $action = '';
-        if (Request::instance()->isPost()) {
-            $data = input('post.');
-            if ($data['action']) {
-                $action = trim($data['action']);
-                $where['action'] = $action;
-            }
-            if ($data['user']) {
-                $uid = intval($data['user']);
-                $where['uid'] = $uid;
-            }
+        $data = request()->param();
+        if (isset($data['action']) && $data['action'] != '') {
+            $action = trim($data['action']);
+            $where['action'] = $action;
         }
-        $list = Db::name('log')->where($where)->order('create_time')->paginate(20);
+        if (isset($data['user']) && $data['user'] != '') {
+            $uid = intval($data['user']);
+            $where['uid'] = $uid;
+        }
+        $list = Db::name('log')->where($where)->order('create_time desc')->paginate(10,false,['query' => $data]);
         $page = $list->render();
         $list = $list->all();
         foreach ($list as &$value) {
@@ -216,6 +220,6 @@ class Rule extends Admin
         unset($value);
         $actions = Log::$action;
         $users = Db::name('users')->field('id,username')->select();
-        return view('', ['list' => $list, 'page' => $page, 'actions' => $actions, 'users' => $users, 'uid' => $uid, 'action' => $action]);
+        return view('', ['list' => $list, 'page' => $page, 'actions' => $actions, 'users' => $users, 'where' => $data]);
     }
 }

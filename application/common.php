@@ -129,3 +129,8 @@ function random($length, $numeric = FALSE) {
     }
     return $hash;
 }
+function show_json($status = 1, $return = null)
+{
+    $ret = array('code' => $status, 'msg' => $return);
+    die(json_encode($ret));
+}

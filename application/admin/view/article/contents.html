@@ -1,0 +1,194 @@
+{include file="public/_header" /}
+<div class="pageheader">
+    <h3><i class="fa fa-list"></i> 文章列表 </h3>
+    <div class="breadcrumb-wrapper hidden-xs"> <span class="label">当前位置:</span>
+        <ol class="breadcrumb">
+            <li> <a href="{:url('index/index')}"> 主页 </a> </li>
+            <li class="active"> 文章列表 </li>
+        </ol>
+    </div>
+</div>
+<div class="page">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12 center">
+                    <form class="form-inline" method="get" action="">
+                        <div class="form-group">
+                            <span class="ui-select">
+                                <select name="cate" style="width: 100%">
+                                  <option value="">文章分类</option>
+                                    {foreach $category as $c}
+                                    <option {if isset($where['cate']) && $where['cate']==$c['id']}selected{/if} value="{$c['id']}">{$c['title']}</option>
+                                    {/foreach}
+                                </select>
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            <span class="ui-select">
+                                <select name="is_recommend" style="width: 100%">
+                                  <option value="">是否推荐</option>
+                                    <option value="yes" {if isset($where['is_recommend']) && $where['is_recommend']=='yes'} selected{/if}>是</option>
+                                    <option value="no" {if isset($where['is_recommend']) && $where['is_recommend']=='no'} selected{/if}>否</option>
+                                </select>
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            <span class="ui-select">
+                                <select name="status" style="width: 100%">
+                                  <option value="">开启状态</option>
+                                  <option value="yes" {if isset($where['status']) && $where['status']=='yes'} selected{/if}>开启</option>
+                                    <option value="no" {if isset($where['status']) && $where['status']=='no'} selected{/if}>关闭</option>
+                                </select>
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" value="{if isset($where['keyword'])}{$where['keyword']}{/if}" name="keyword" placeholder="关键字" class="form-control" style="height: 39px;">
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="waves-effect waves-button waves-float waves-lightblue">搜索</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <h6 class="nm pad-15"> <a type="button" class="waves-effect waves-button waves-float waves-lightblue" href="{:url('article/content_add')}"><i class="fa fa-plus"></i>&nbsp;
+            添加文章 </a> </h6>
+        <div class="panel-body">
+            <div class="table-flip-scroll">
+                <table class="table table-bordered table-striped cf">
+                    <thead class="cf">
+                    <tr>
+                        <th>排序</th>
+                        <th>标题</th>
+                        <th>是否推荐</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {foreach $list as $item}
+                    <tr>
+                        <td><a href='javascript:;' data-toggle='ajaxEdit' data-href="{:url('article/content_edit',array('type' => 'displayorder', 'id' => $item['id']))}" >{$item['displayorder']}</a>
+                            &nbsp;&nbsp;<i class="fa fa-edit" data-toggle="ajaxEdit2"></i></td>
+                        <td><a href='javascript:;' data-toggle='ajaxEdit' data-href="{:url('article/content_edit',array('type' => 'title', 'id' => $item['id']))}" >{$item['title']}</a>&nbsp;&nbsp;<i class="fa fa-edit" data-toggle="ajaxEdit2"></i></td>
+                        <td><a type="button" data-href="{:url('article/content_edit',array('type' => 'is_recommend', 'id' => $item['id'],'value' => $item['is_recommend'] ? 0 : 1))}" id="is_recommend" class="btn {if $item['is_recommend']==1}btn-success{else}btn-danger{/if} btn-xs">{if $item['is_recommend']==1}是{else}否{/if}</a></td>
+                        <td><a type="button" data-href="{:url('article/content_edit',array('type' => 'status', 'id' => $item['id'],'value' => $item['status'] ? 0 : 1))}" id="status" class="btn {if $item['status']==1}btn-success{else}btn-danger{/if} btn-xs" data-loading-text="Loading...">{if $item['status']==1}开启{else}关闭{/if}</a></td>
+                        <td><a type="button" href="{:url('article/content_edit',array('id' => $item['id']))}" class="btn btn-default btn-xs"><i class="fa fa-edit"></i>&nbsp;
+                            编辑 </a>
+                            <a type="button" href="{:url('article/content_delete',array('id' => $item['id']))}" onClick="return confirm('确定删除此篇文章吗?');" class="btn btn-danger btn-xs"><i class="fa fa-close"></i>&nbsp;
+                                删除 </a>
+                        </td>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {$page}
+</div>
+<script>
+    $(function () {
+        $("#status,#is_recommend").click(function () {
+            let btn = $(this);
+            let css = btn.attr('class');
+            let text = btn.text();
+            btn.html('<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>');
+            let url = btn.data('href');
+            $.get(url,function (ret) {
+                if (ret.code == 0) {
+                    alert(ret.msg);
+                    btn.text(text);
+                } else {
+                    if (text == '是') {
+                        text = '否';
+                    } else if (text == '否') {
+                        text = '是';
+                    } else if (text == '关闭') {
+                        text = '开启';
+                    } else if (text == '开启') {
+                        text = '关闭';
+                    }
+                    if (css == 'btn btn-danger btn-xs') {
+                        css = 'btn btn-success btn-xs';
+                    } else if (css == 'btn btn-success btn-xs') {
+                        css = 'btn btn-danger btn-xs';
+                    }
+                    btn.text(text);
+                    btn.attr('class',css);
+                    //window.location.reload();
+                }
+            })
+        })
+    })
+    $(document).on("click", '[data-toggle="ajaxEdit2"]',
+        function (e) {
+            let _this = $(this)
+            $(this).addClass('hidden')
+            let obj = $(this).parent().find('a'),
+                url = obj.data('href') || obj.attr('href'),
+                data = obj.data('set') || {},
+                html = $.trim(obj.text()),
+                required = obj.data('required') || true,
+                edit = obj.data('edit') || 'input';
+            let oldval = $.trim($(this).text());
+            e.preventDefault();
+
+            submit = function () {
+                e.preventDefault();
+                var val = $.trim(input.val());
+                if (required) {
+                    if (val == '') {
+                        alert('值为空');
+                        return;
+                    }
+                }
+                if (val == html) {
+                    input.remove(), obj.html(val).show();
+                    //obj.closest('tr').find('.icow').css({visibility:'visible'})
+                    return;
+                }
+                if (url) {
+                    $.post(url, {
+                        value: val
+                    }, function (ret) {
+                        if (ret.code == 1) {
+                            obj.html(val).show();
+
+                        } else {
+                            alert(ret.msg);
+                        }
+                        input.remove();
+                    }).fail(function () {
+                        input.remove(), alert('失败');
+                    });
+                } else {
+                    input.remove();
+                    obj.html(val).show();
+                }
+                obj.trigger('valueChange', [val, oldval]);
+            },
+                obj.hide().html('<i class="fa fa-spinner fa-spin"></i>');
+            var input = $('<input type="text" class="form-control input-sm" style="width: 80%;display: inline;" />');
+            if (edit == 'textarea') {
+                input = $('<textarea type="text" class="form-control" style="resize:none;" rows=3 width="100%" ></textarea>');
+            }
+            obj.after(input);
+
+            input.val(html).select().blur(function () {
+                submit(input);
+                _this.removeClass('hidden')
+
+            }).keypress(function (e) {
+                if (e.which == 13) {
+                    submit(input);
+                    _this.removeClass('hidden')
+                }
+            });
+
+        })
+</script>
+{include file="public/_footer" /}

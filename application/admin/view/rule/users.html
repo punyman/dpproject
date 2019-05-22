@@ -10,8 +10,8 @@
 </div>
 <div class="page">
     <div class="panel panel-default">
-        <h4 class="nm pad-15"> <a href="{:url('rule/user_add')}" class="waves-effect waves-button waves-float waves-success"><i class="fa fa-plus"></i>&nbsp;
-            添加用户 </a></h4>
+        <h6 class="nm pad-15"> <a href="{:url('rule/user_add')}" class="waves-effect waves-button waves-float waves-lightblue"><i class="fa fa-plus"></i>&nbsp;
+            添加用户 </a></h6>
         <div class="panel-body">
             <div class="table-flip-scroll">
                 <table class="table table-bordered table-striped cf table-hover">
@@ -28,7 +28,7 @@
                     <tr>
                         <td>{$user['username']}</td>
                         <td>{$user['groups']}</td>
-                        <td><span class="btn btn-xs waves-effect waves-button waves-float {$user['status_css']}">{$user['status_str']}</span></td>
+                        <td><span class="btn {$user['status_css']} btn-xs" id="status" data-href="{:url('rule/user_edit',array('id'=>$user['id'],'value'=>$user['status'] ? 0 : 1))}">{$user['status_str']}</span></td>
                         <td><a class="editable-click" href="{:url('rule/user_edit',array('id' => $user['id']))}">修改权限或密码</a></td>
                     </tr>
                     {/foreach}
@@ -39,4 +39,34 @@
     </div>
     {$page}
 </div>
+<script>
+    $(function () {
+        $("#status").click(function () {
+            let btn = $(this);
+            let css = btn.attr('class');
+            let text = btn.text();
+            btn.html('<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>');
+            let url = btn.data('href');
+            $.get(url,function (ret) {
+                if (ret.code == 0) {
+                    alert(ret.msg);
+                    btn.text(text);
+                } else {
+                    if (text == '正常') {
+                        text = '禁用';
+                    } else if (text == '禁用') {
+                        text = '正常';
+                    }
+                    if (css == 'btn btn-danger btn-xs') {
+                        css = 'btn btn-success btn-xs';
+                    } else if (css == 'btn btn-success btn-xs') {
+                        css = 'btn btn-danger btn-xs';
+                    }
+                    btn.text(text);
+                    btn.attr('class',css);
+                }
+            })
+        });
+    })
+</script>
 {include file="public/_footer" /}

@@ -21,6 +21,11 @@ class Log extends Model
         'rule/group_delete' => '删除角色',
         'rule/group_authorize' => '分配权限',
         'rule/user_add' => '添加用户',
-        'rule/user_edit' => '编辑用户'
+        'rule/user_edit' => '编辑用户',
+        'article/category_add' => '添加分类',
+        'article/category_edit' => '编辑分类',
+        'article/category_delete' => '删除分类',
+        'article/content_add' => '添加文章',
+        'article/content_edit' => '编辑文章'
     ];
 }

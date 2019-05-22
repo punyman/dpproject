@@ -1,0 +1,127 @@
+{include file="public/_header" /}
+<script src="{$Think.config.web_root}/ueditor/ueditor.config.js"></script>
+<script src="{$Think.config.web_root}/ueditor/ueditor.all.min.js"></script>
+<script src="{$Think.config.web_root}/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript" charset="utf-8">
+    window.UEDITOR_HOME_URL = "{$Think.config.web_root}/ueditor/";
+    $(document).ready(function () {
+        UE.getEditor('ue', {
+            initialFrameHeight: 500,
+            serverUrl: "{:url('upload/index')}"
+        });
+    });
+
+</script>
+<div class="pageheader">
+    <h3><i class="fa fa-file"></i> 添加文章 </h3>
+    <div class="breadcrumb-wrapper hidden-xs"> <span class="label">当前位置:</span>
+        <ol class="breadcrumb">
+            <li> <a href="{:url('index/index')}"> 主页 </a> </li>
+            <li class="active"> 添加文章 </li>
+        </ol>
+    </div>
+</div>
+<div class="page">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <form class="form-horizontal form-validate" method="post" action="" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label class="col-sm-2">排序</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="displayorder" class="form-control" value="0">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2">标题</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="title" class="form-control" required="required" data-msg="请输入文章标题">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2">短标题</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="subtitle" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2">作者</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="author" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2">分类</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" name="cate">
+                            <option value="">请选择分类</option>
+                            {foreach $category as $v}
+                            <option value="{$v['id']}">{$v['title']}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2">封面</label>
+                    <div class="col-sm-10">
+                        <div class="input-group ">
+                            <input type="text" id="thumb" value="" class="form-control" autocomplete="off">
+                            <span class="input-group-btn">
+                                <input type="file" accept="image/gif, image/jpeg, image/png" onchange="getFileToPicture(event)" name="thumb" title="选择图片" data-ui-file-upload>
+                            </span>
+                        </div>
+                        <div class="input-group " style="margin-top:.5em;">
+                            <div id="picvalue">
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2">内容</label>
+                    <div class="col-sm-10">
+                        <textarea name="content" id="ue"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2">是否推荐</label>
+                    <div class="col-sm-10">
+                        <label class="ui-radio">
+                            <input name="is_recommend" type="radio" value="1" checked>
+                            <span>是</span></label>
+                        <label class="ui-radio">
+                            <input name="is_recommend" type="radio" value="0">
+                            <span>否</span></label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2">是否开启</label>
+                    <div class="col-sm-10">
+                        <label class="ui-radio">
+                            <input name="status" type="radio" value="1" checked>
+                            <span>开启</span></label>
+                        <label class="ui-radio">
+                            <input name="status" type="radio" value="0" >
+                            <span>关闭</span></label>
+                    </div>
+                </div>
+                <button type="submit"
+                        class="waves-effect waves-button waves-float waves-lightblue"
+                >提交</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    function getFileToPicture(event) {
+        let file = event.target.files[0];
+        let freader = new FileReader();
+        freader.readAsDataURL(file);
+        freader.onload = (e) => {
+            let html = '<img src="' + freader.result + '" class="img-responsive img-thumbnail" width="150">';
+            $("#picvalue").html(html);
+            $("#thumb").val("{$Think.config.web_root}"+'/uploads/'+file.name);
+        }
+    }
+</script>
+{include file="public/_footer" /}

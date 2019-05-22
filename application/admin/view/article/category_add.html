@@ -11,19 +11,20 @@
 <div class="page">
     <div class="panel panel-default">
         <div class="panel-body">
-            <form method="post" action="{:url('article/category_add')}" name="form" class="form-validate" enctype="multipart/form-data">
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label>名称</label>
+            <form method="post" action="{:url('article/category_add')}" name="form" class="form-validate form-horizontal" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label class="col-sm-2">名称</label>
+                    <div class="col-sm-10">
                         <input class="form-control" type="text" name="title" required data-msg="请填写名称">
                     </div>
-                    <div class="form-group">
-                        <label>排序</label>
-                        <input class="form-control" type="text" value="0" name="displayorder">
-                    </div>
-                    <div class="form-group">
-                        <label>是否显示</label>
-                        <label></label>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2">排序</label>
+                    <div class="col-sm-10"><input class="form-control" type="text" value="0" name="displayorder"></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2">是否显示</label>
+                    <div class="col-sm-10">
                         <label class="ui-radio">
                             <input name="status" type="radio" value="1" checked>
                             <span>是</span>
@@ -33,18 +34,39 @@
                             <span>否</span>
                         </label>
                     </div>
-                    <div class="form-group">
-                        <label>分类图片</label>
-                        <input class="form-control" name="thumb" type="file" title="选择文件" data-ui-file-upload>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2">分类图片</label>
+                    <div class="col-sm-10">
+                        <div class="input-group ">
+                            <input type="text" id="thumb" name="a" value="" class="form-control" autocomplete="off">
+                            <span class="input-group-btn">
+                                <input type="file" accept="image/gif, image/jpeg, image/png" onchange="getFileToPicture(event)" name="thumb" title="选择图片" data-ui-file-upload>
+                            </span>
+                        </div>
+                        <div class="input-group " style="margin-top:.5em;">
+                            <div id="picvalue">
+
+                            </div>
+                        </div>
                         <input type="hidden" name="pid" id="pid" value="{$parent_id}">
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <span type="button" class="btn btn-default" data-dismiss="modal">关闭</span>
-                    <button type="submit" class="btn btn-primary btn-submit">提交</button>
-                </div>
+                <button type="submit" class="waves-effect waves-button waves-float waves-lightblue">提交</button>
             </form>
         </div>
     </div>
 </div>
+<script>
+    function getFileToPicture(event) {
+        let file = event.target.files[0];
+        let freader = new FileReader();
+        freader.readAsDataURL(file);
+        freader.onload = (e) => {
+            let html = '<img src="' + freader.result + '" class="img-responsive img-thumbnail" width="150">';
+            $("#picvalue").html(html);
+            $("#thumb").val("{$Think.config.web_root}"+'/uploads/'+file.name);
+        }
+    }
+</script>
 {include file="public/_footer" /}
