@@ -27,13 +27,13 @@
         }
     </style>
 </head>
-<body data-ng-controller="AppCtrl">
-<div id="app" class="app" data-custom-page="" data-off-canvas-nav="" data-ng-class=" {'layout-boxed': admin.layout} ">
-    <header data-ng-controller="HeaderCtrl" id="header" class="header-container {{admin.navbarHeaderColor}}" data-ng-class="{'header-fixed': admin.fixedHeader}">
+<body>
+<div id="app" class="app">
+    <header id="header" class="header-container header-fixed bg-dark">
         {include file="public/header" /}
     </header>
     <div class="main-container">
-        <aside id="nav-container" class="nav-container {{admin.asideColor}}" data-ng-class=" {'nav-fixed': admin.fixedSidebar, 'nav-horizontal': admin.menu}">
+        <aside id="nav-container" class="nav-container bg-white header-fixed">
             {include file="public/nav" /}
         </aside>
         <div id="content" class="content-container animate-fade-up">
