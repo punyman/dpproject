@@ -21,13 +21,15 @@ class Users extends Model
     {
         $user = Db::name('users')->where(['username' => $username])->find();
         if (empty($user)) {
-            return error(-1, '用户名密码错误');
+            return error(-1, '无此账号');
         } else {
             if (!$user['status']) {
                 return error(-1 ,'此账户暂时无法登陆');
             }
             if (userpassword($password, $user['salt']) == $user['password']) {
                 return $user;
+            } else {
+                return error(-1, '用户名密码错误');
             }
         }
     }
